@@ -25,4 +25,4 @@ to develop a map with Shibuya Coffee Shops.
 - JSX
 
 ## Screenshots: 
-![Neighbourhood Maps](https://i.imgur.com/ntRxLFb.png)
+![Neighbourhood Maps]()
