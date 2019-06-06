@@ -67,6 +67,7 @@ export class MapContainer extends React.PureComponent {
                 });
             })
             .catch(error => {
+                alert("Sorry! Something went wrong with FOURSQUARE API :(")
                 console.log(error)
             })
         )
@@ -103,22 +104,6 @@ export class MapContainer extends React.PureComponent {
         }
     }
 
-    // Item click
-
-    onItemClick = (i) => {
-        const marker = this.state.coffees.find(marker => marker === i);
-    console.log(marker);
-    console.log(i)
-
-    if ( marker === i) {
-        console.log('yes')
-        
-    } else {
-        console.log('nope')
-    }
-   // this.onMarkerClick()
-    }
-
     render() {
 
         return (
@@ -142,13 +127,13 @@ export class MapContainer extends React.PureComponent {
                                     onChange={(event) => this.filterCoffees(event.target.value)}
                                 />
                                 <InputGroup.Append>
-                                    <Button style={{ backgroundColor:'#96376A', border: '0', color: '#fff'}} >Search</Button>
+                                    <Button style={{ backgroundColor:'#96376A', border: '0', color: '#fff'}} aria-label="search">Search</Button>
                                 </InputGroup.Append>
                             </InputGroup>
-                            <ListGroup variant="flush">
+                            <ListGroup variant="flush" aria-label="listgroup">
                                 {
                                     this.state.filteredCoffees.map((Singlevenue) => (
-                                        <ListGroup.Item as='button' style={{ color: '#96376A', textAlign: 'left'}} key={Singlevenue.referralId} onClick={ this.onItemClick(Singlevenue)}>
+                                        <ListGroup.Item as='button' style={{ color: '#96376A', textAlign: 'left'}} key={Singlevenue.referralId} onClick={() => this.onMarkerClick(this.refs[Singlevenue.venue.id].props, this.refs[Singlevenue.venue.id].marker)}>
                                             {Singlevenue.venue.name}
                                         </ListGroup.Item>
                                     ))
@@ -272,8 +257,9 @@ export class MapContainer extends React.PureComponent {
                             {this.state.filteredCoffees.map((SingleVenue) =>
                                 //  Markers
                                 <Marker
+                                    ref={SingleVenue.venue.id}
                                     onClick={this.onMarkerClick.bind(this)}
-                                    animation={(this.state.activeMarker === SingleVenue.title) && this.props.google.maps.Animation.BOUNCE}
+                                    animation={this.state.activeMarker && this.state.activeMarker.coffeeAddress === SingleVenue.venue.location.address && this.props.google.maps.Animation.DROP}
                                     key={SingleVenue.referralId}
                                     position={{
                                         lat: SingleVenue.venue.location.lat,
